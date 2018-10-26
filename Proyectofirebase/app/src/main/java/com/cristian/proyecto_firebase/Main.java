@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -21,13 +22,17 @@ import com.google.firebase.database.FirebaseDatabase;
 
 public class Main extends AppCompatActivity {
 
-   private FirebaseAuth auth;
+    private static final int REQUEST_GALLERY = 100 ;
+    private FirebaseAuth auth;
    private Button btnComentar;
    private TextView txtcomentario;
    private ListView listaComentarios;
    private Adaptador adaptador;
    private FirebaseDatabase db;
 
+
+   Button btn_agregarfoto;
+   ImageView img_foto;
 
 
     @Override
@@ -46,6 +51,9 @@ public class Main extends AppCompatActivity {
             finish();
         }
 
+        btn_agregarfoto = findViewById(R.id.btn_agregarfoto);
+        img_foto = findViewById(R.id.img_foto);
+
         txtcomentario = findViewById(R.id.txtComentario);
         btnComentar = findViewById(R.id.btnComentario);
         listaComentarios = findViewById(R.id.listaComentarios);
@@ -56,6 +64,7 @@ public class Main extends AppCompatActivity {
 
         // lo vamos a usar cada vez que se agrega un comentario
         comentarios_ref.addChildEventListener(new ChildEventListener() {
+            //Acá se va a cargar la informacion nueva
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
 
@@ -110,8 +119,28 @@ public class Main extends AppCompatActivity {
 
 
 
+        btn_agregarfoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent();
+                //Se queda vació para agregar acciones
+                i.setType("image/*");
+                //i.setType("video/*");
+                //i.setType("*/*");
+                i.setAction(Intent.ACTION_GET_CONTENT);
+                startActivityForResult(i,REQUEST_GALLERY);
+            }
+        });
 
 
 
+
+
+    }
+//ESto se ejecuta después de abrir la galeria
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if(requestCode == REQUEST_GALLERY && resultCode ==RESULT_OK)
+        //ACCIONES QUE HAREMOS EN 15 DIAS
     }
 }
